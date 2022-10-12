@@ -21,6 +21,8 @@ private slots:
 
     void on_getButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QIntValidator qIntValidator;
