@@ -23,7 +23,7 @@ MainWindow::~MainWindow()
 }
 int count=0; //for task1
 
-//ForTask1
+//region Task1
 bool is_prime(uint n)
 {
     if (n == 2)
@@ -70,8 +70,9 @@ void MainWindow::on_getButton_clicked()
         ui->task1->findChild<QListWidget*>("listWidget")->addItems(primelist);
     }
 }
+//endregion Task1
 
-//Task2
+//region Task2
 QStringList GetCountWordAndLength(QString str,QStringList list)
 {
     std::map<int,int> sizeAndCount;
@@ -116,6 +117,133 @@ void MainWindow::on_pushButton_clicked()
         QStringList wordList;
         wordList=GetCountWordAndLength(ui->task2->findChild<QLineEdit*>("lineEditTask2")->text()+" ",wordList);
         ui->task2->findChild<QListWidget*>("listWidget_2")->addItems(wordList);
+    }
+}
+//endregion Task2
+
+//region Task3
+struct Node
+{
+    Node* next;
+    int data;
+    Node(int value){
+        data=value;
+        next=nullptr;
+    }
+};
+class List
+{
+    Node* first;
+    Node* last;
+public:
+    List(){
+        first=nullptr;
+        last=nullptr;
+    }
+    bool isEmpty()
+    {
+        return first == nullptr;
+    }
+    void pushBack(int value)
+    {
+        Node *node=new Node(value);
+        if(isEmpty())
+        {
+            first=node;
+            last=node;
+            return;
+        }
+        last->next=node;
+        last=node;
+    }
+    QStringList printList()
+    {
+        int i=1;
+        QStringList temp;
+        if(isEmpty())
+            return temp;
+        Node *current=first;
+        while(current)
+        {
+            temp.append("["+QString::number(i)+"] "+QString::number(current->data));
+            current = current->next;
+            i++;
+        }
+        return temp;
+    }
+    QStringList printList(int param)
+    {
+        int i=1;
+        QStringList temp;
+        if(isEmpty())
+            return temp;
+        Node *current=first;
+        while(current)
+        {
+            if(i%param==0)
+            {
+                temp.append("---deleted--- ("+QString::number(current->data)+")");
+            }
+            else
+                temp.append("["+QString::number(i)+"] "+QString::number(current->data));
+            current = current->next;
+            i++;
+        }
+        return temp;
+    }
+    List DeleteEveryFifthElement()
+    {
+        int i=1;
+        List temp;
+        if(isEmpty())
+            return temp;
+        Node *current=first;
+        while(current)
+        {
+            if(i!=5)
+            {
+                temp.pushBack(current->data);
+                current = current->next;
+                i++;
+            }
+            else
+            {
+                current = current->next;
+                i=1;
+            }
+        }
+        return temp;
+    }
+};
+List task3List;
+void Rand(int count)
+{
+    task3List={};
+    while(count>0)
+    {
+        task3List.pushBack(qrand());
+        count--;
+    }
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->task3->findChild<QListWidget*>("listWidget_3")->clear();
+    int countElements=ui->task3->findChild<QSpinBox*>("spinBox")->value();
+    Rand(countElements);
+    ui->task3->findChild<QListWidget*>("listWidget_3")->addItems(task3List.printList());
+}
+//endregion Task3
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    if(!task3List.isEmpty())
+    {
+        ui->task3->findChild<QListWidget*>("listWidget_4")->clear();
+        ui->task3->findChild<QListWidget*>("listWidget_4")->addItems(task3List.printList(5));
+        task3List=task3List.DeleteEveryFifthElement();
+        ui->task3->findChild<QListWidget*>("listWidget_3")->clear();
+        ui->task3->findChild<QListWidget*>("listWidget_3")->addItems(task3List.printList());
     }
 }
 
