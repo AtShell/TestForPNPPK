@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <bitset>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -233,7 +234,6 @@ void MainWindow::on_pushButton_2_clicked()
     Rand(countElements);
     ui->task3->findChild<QListWidget*>("listWidget_3")->addItems(task3List.printList());
 }
-//endregion Task3
 
 void MainWindow::on_pushButton_3_clicked()
 {
@@ -244,6 +244,42 @@ void MainWindow::on_pushButton_3_clicked()
         task3List=task3List.DeleteEveryFifthElement();
         ui->task3->findChild<QListWidget*>("listWidget_3")->clear();
         ui->task3->findChild<QListWidget*>("listWidget_3")->addItems(task3List.printList());
+    }
+}
+//endregion Task3
+
+//region Task4
+template <typename T>
+T bit_count (T input) {
+    T res = 0;
+    static const unsigned shift_size = ((sizeof(T) * 8)-1);
+    if(input < 0) {
+        res ++;
+        input &= ( (1 << shift_size) - 1 );
+    }
+    while( input ) {
+        res += (input & 1);
+        input >>= 1;
+    }
+    return res;
+}
+ulong maxNumber(int count)
+{
+    return std::pow(2,count)-1;
+}
+void MainWindow::on_pushButton_4_clicked()
+{
+    ulong value=0;
+    //ulong max=
+    if(ui->task4->findChild<QLineEdit*>("lineEdit")->text().toUInt()>=0&&ui->task4->findChild<QLineEdit*>("lineEdit")->text().toUInt()<=UINT_MAX)
+    {
+        ui->task4->findChild<QLineEdit*>("lineEdit_2")->clear();
+        ui->task4->findChild<QLineEdit*>("lineEdit_3")->clear();
+        ui->task4->findChild<QLineEdit*>("lineEdit_4")->clear();
+        value= ui->task4->findChild<QLineEdit*>("lineEdit")->text().toUInt();
+        ui->task4->findChild<QLineEdit*>("lineEdit_2")->insert(QString::number(bit_count(value)));
+        ui->task4->findChild<QLineEdit*>("lineEdit_3")->insert("0");
+        ui->task4->findChild<QLineEdit*>("lineEdit_4")->insert(QString::number(maxNumber(bit_count(value))));
     }
 }
 
