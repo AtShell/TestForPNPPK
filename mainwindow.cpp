@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-//#include "./ui_mainwindow.h"
 #include "qlineedit.h"
 #include "cmath"
 #include "qlistwidget.h"
@@ -24,7 +23,7 @@ MainWindow::~MainWindow()
 }
 int count=0; //for task1
 
-//region Task1
+//#region Task1
 bool is_prime(uint n)
 {
     if (n == 2)
@@ -71,9 +70,9 @@ void MainWindow::on_getButton_clicked()
         ui->task1->findChild<QListWidget*>("listWidget")->addItems(primelist);
     }
 }
-//endregion Task1
+//endregion
 
-//region Task2
+//#region Task2
 QStringList GetCountWordAndLength(QString str,QStringList list)
 {
     std::map<int,int> sizeAndCount;
@@ -120,9 +119,9 @@ void MainWindow::on_pushButton_clicked()
         ui->task2->findChild<QListWidget*>("listWidget_2")->addItems(wordList);
     }
 }
-//endregion Task2
+//#endregion
 
-//region Task3
+//#region Task3
 struct Node
 {
     Node* next;
@@ -246,9 +245,9 @@ void MainWindow::on_pushButton_3_clicked()
         ui->task3->findChild<QListWidget*>("listWidget_3")->addItems(task3List.printList());
     }
 }
-//endregion Task3
+//#endregion
 
-//region Task4
+//#region Task4
 template <typename T>
 T bit_count (T input) {
     T res = 0;
@@ -270,7 +269,6 @@ ulong maxNumber(int count)
 void MainWindow::on_pushButton_4_clicked()
 {
     ulong value=0;
-    //ulong max=
     if(ui->task4->findChild<QLineEdit*>("lineEdit")->text().toUInt()>=0&&ui->task4->findChild<QLineEdit*>("lineEdit")->text().toUInt()<=UINT_MAX)
     {
         ui->task4->findChild<QLineEdit*>("lineEdit_2")->clear();
@@ -282,4 +280,96 @@ void MainWindow::on_pushButton_4_clicked()
         ui->task4->findChild<QLineEdit*>("lineEdit_4")->insert(QString::number(maxNumber(bit_count(value))));
     }
 }
+//#endregion
 
+//#region Task5
+struct TreeNode
+{
+    int data;
+    TreeNode* leftChild;
+    TreeNode* rightChild;
+
+    TreeNode(int value)
+    {
+        data=value;
+        leftChild=nullptr;
+        rightChild=nullptr;
+    }
+    TreeNode()
+    {
+
+    }
+};
+class BinaryTree
+{
+public:
+    TreeNode* root;
+    BinaryTree();
+    BinaryTree(int);
+    void insert(int);
+    void print(TreeNode*);
+private:
+    int size;
+};
+QStringList TreeList;
+BinaryTree::BinaryTree(int value)
+{
+    root=new TreeNode(value);
+    size=1;
+}
+void BinaryTree::print(TreeNode* current)
+{
+    if(current)
+    {
+        print(current->leftChild);
+        TreeList.append(QString::number(current->data)+" ");
+        print(current->rightChild);
+
+    }
+}
+void BinaryTree::insert(int value)
+{
+   TreeNode* current=root;
+   while(current&&current->data!=value)
+   {
+       if(current->data>value&&current->leftChild==NULL)
+       {
+           current->leftChild=new TreeNode(value);
+           size++;
+           return;
+       }
+       if(current->data<value&&current->rightChild==NULL)
+       {
+           current->rightChild=new TreeNode(value);
+           size++;
+           return;
+       }
+       if(current->data>value)
+           current=current->leftChild;
+       else
+           current=current->rightChild;
+   }
+}
+int maxDepth(TreeNode* Tree)
+{
+if (Tree==NULL) return 0;
+return std::max(maxDepth(Tree->leftChild),maxDepth(Tree->rightChild))+1;
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    ui->task5->findChild<QListWidget*>("listWidget_5")->clear();
+    ui->task5->findChild<QLineEdit*>("lineEdit_5")->clear();
+    BinaryTree Tree(qrand());
+    int countOfElements=ui->task5->findChild<QSpinBox*>("spinBox_2")->value();
+    for(int i=1;i<=countOfElements;i++)
+    {
+        Tree.insert(qrand());
+    }
+    Tree.print(Tree.root);
+    ui->task5->findChild<QListWidget*>("listWidget_5")->addItems(TreeList);
+    TreeList.clear();
+    ui->task5->findChild<QLineEdit*>("lineEdit_5")->insert(QString::number(maxDepth(Tree.root)));
+    Tree.root=NULL;
+}
+//#endregion
